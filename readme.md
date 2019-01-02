@@ -14,7 +14,7 @@ These are some Plex Tampermonkey scripts.
 
 ## Scripts
 
-## `Change Seson Names`
+### `Change Seson Names`
 
 Allow you to change Season names on TV shows. Usful for home movies to have seasons as years, or holidays.
 
