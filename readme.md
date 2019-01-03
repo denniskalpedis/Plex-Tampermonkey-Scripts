@@ -28,3 +28,7 @@ You will need your own API for both. or disable fanart, and only use TMDB.
 You can set your language of the cover art text on TMDB, and you can set the size of the poster to be downloaded to plex.
 
 Changes poster, but doesn't show current poster available to choose. (yet)
+
+#### `TODO:`
+1. When you click edit and save I would like it to update the default poster if you changed individual movie posters within the collection.
+1. Get current poster to show as selected when set with this tool.
