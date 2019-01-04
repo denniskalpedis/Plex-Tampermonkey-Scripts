@@ -80,11 +80,12 @@ $('body').arrive('.artwork-options-list', function () {
                     $('.artwork-options-list').append('<span class="poster"><a class="artwork-option media-poster-container" data-rating-key="' + results[i] + '" href="#"> <div class="media-poster"><img class="media-poster-image loaded" src="' + results[i].replace(posterSize, "w154") + '"></div> </a> </span>')
                 }
             }
-            // can't test yet....
-            if (fanartResults.movieposter.length != 0) {
-                let results = fanartResults.movieposter.map(i => i.url);
-                for (let i = 0; i < results.length; i++) {
-                    $('.artwork-options-list').append('<span class="poster"><a class="artwork-option media-poster-container" data-rating-key="' + results[i] + '" href="#"> <div class="media-poster"><img class="media-poster-image loaded" src="' + results[i].replace("fanart/movies", "preview/movies") + '"></div> </a> </span>');
+            if (fanartResults) {
+                if (fanartResults.movieposter.length != 0) {
+                    let results = fanartResults.movieposter.map(i => i.url);
+                    for (let i = 0; i < results.length; i++) {
+                        $('.artwork-options-list').append('<span class="poster"><a class="artwork-option media-poster-container" data-rating-key="' + results[i] + '" href="#"> <div class="media-poster"><img class="media-poster-image loaded" src="' + results[i].replace("fanart/movies", "preview/movies") + '"></div> </a> </span>');
+                    }
                 }
             }
 
@@ -101,10 +102,12 @@ $('body').arrive('.artwork-options-list', function () {
                 }
             }
             // can't test yet....
-            if (fanartResults.moviebackground.length != 0) {
-                let results = fanartResults.moviebackground.map(i => i.url);
-                for (let i = 0; i < results.length; i++) {
-                    $('.artwork-options-list').append('<span class="poster"><a class="artwork-option media-poster-container" data-rating-key="' + results[i] + '" href="#"> <div class="media-poster"><img class="media-poster-image loaded" src="' + results[i].replace("fanart/movies", "preview/movies") + '"></div> </a> </span>');
+            if (fanartResults) {
+                if (fanartResults.moviebackground.length != 0) {
+                    let results = fanartResults.moviebackground.map(i => i.url);
+                    for (let i = 0; i < results.length; i++) {
+                        $('.artwork-options-list').append('<span class="poster"><a class="artwork-option media-poster-container" data-rating-key="' + results[i] + '" href="#"> <div class="media-poster"><img class="media-poster-image loaded" src="' + results[i].replace("fanart/movies", "preview/movies") + '"></div> </a> </span>');
+                    }
                 }
             }
 
