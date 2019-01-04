@@ -22,6 +22,8 @@ After insalled just go to the season and click edit. New field will show current
 
 ### `Collection Posters`
 
+**requires TMDB API Key**
+
 Shows you posters available for collections. uses TMDB and fanart.
 You will need your own API for both. or disable fanart, and only use TMDB.
 
@@ -30,5 +32,5 @@ You can set your language of the cover art text on TMDB, and you can set the siz
 Changes poster, but doesn't show current poster available to choose. (yet)
 
 #### `TODO:`
-1. When you click edit and save I would like it to update the default poster if you changed individual movie posters within the collection.
-1. Get current poster to show as selected when set with this tool.
+- [ ] When you click edit and save I would like it to update the default poster if you changed individual movie posters within the collection.
+- [ ] Get current poster to show as selected when set with this tool.
