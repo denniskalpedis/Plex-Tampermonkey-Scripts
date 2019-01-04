@@ -3,8 +3,10 @@
 // @namespace   Plex.tv
 // @include     http*://<Private IP to access Plex>:32400/*
 // @include     http*://app.plex.tv/*
-// @version     1
+// @version     1.1
 // @grant       none
+// @updateURL    https://raw.githubusercontent.com/denniskalpedis/Plex-Tampermonkey-Scripts/master/collectionPosters.js
+// @downloadURL  https://raw.githubusercontent.com/denniskalpedis/Plex-Tampermonkey-Scripts/master/collectionPosters.js
 // @require     https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js
 // @require     https://raw.githubusercontent.com/uzairfarooq/arrive/master/minified/arrive.min.js
 // ==/UserScript==
