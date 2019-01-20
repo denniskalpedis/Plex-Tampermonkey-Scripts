@@ -3,7 +3,7 @@
 // @namespace   Plex.tv
 // @include     http*://<Private IP to access Plex>:32400/*
 // @include     http*://app.plex.tv/*
-// @version     1.1
+// @version     1.2
 // @grant       none
 // @updateURL    https://raw.githubusercontent.com/denniskalpedis/Plex-Tampermonkey-Scripts/master/collectionPosters.js
 // @downloadURL  https://raw.githubusercontent.com/denniskalpedis/Plex-Tampermonkey-Scripts/master/collectionPosters.js
@@ -43,7 +43,6 @@ $('body').arrive('.artwork-options-list', function () {
             }
         }
     });
-
     function hitAPIs(_callback) {
         let name = encodeURI($(".modal-title").html().split("Edit ")[1]);
         var settings = {
@@ -51,36 +50,44 @@ $('body').arrive('.artwork-options-list', function () {
             "crossDomain": true,
             "url": "https://api.themoviedb.org/3/search/collection?api_key=" + tmdbAPI + "&language=" + language + "&query=" + name + "&page=1",
             "method": "GET",
-            "headers": {},
-            "data": "{}"
+            "headers": {}
         }
         $.ajax(settings).done(function (response) {
-            settings.url = "https://api.themoviedb.org/3/collection/" + response.results[0].id + "/images?api_key=" + tmdbAPI + "&language=null," + language;
-            $.ajax(settings).done(function (response) {
-                tmdbResults = response;
-                if (fanArt) {
-                    settings.url = "https://webservice.fanart.tv/v3/movies/" + response.id + "?api_key=" + fanArtAPI;
-                    $.ajax(settings).done(function (response) {
-                        fanartResults = response;
+            if(response.results.length > 0){
+                settings.url = "https://api.themoviedb.org/3/collection/" + response.results[0].id + "/images?api_key=" + tmdbAPI + "&language=null," + language;
+                $.ajax(settings).done(function (response) {
+                    tmdbResults = response;
+                    if (fanArt) {
+                        settings.url = "https://webservice.fanart.tv/v3/movies/" + response.id + "?api_key=" + fanArtAPI;
+                        $.ajax(settings).done(function (response) {
+                            fanartResults = response;
+                            _callback();
+                        }).fail(function(xhr, status, error){
+                            alert("ERROR! FanART API key giving error: " + xhr.status + "\nCheck key and if issue persists you might want to disable it.");
+                            _callback();
+                        });
+                    } else {
                         _callback();
-                    });
-                } else {
-                    _callback();
-                }
-            });
+                    }
+                });
+            } else {
+                tmdbResults = response;
+            }
+        }).fail(function(xhr, status, error){
+            alert("ERROR! TheMovieDB API key giving error: " + xhr.status + "\nYou need a valid key to get posters.");
         });
 
     }
 
     function updatePosters() {
-        if (tmdbResults.posters.length != 0) {
+        if (!tmdbResults.results && tmdbResults.posters.length != 0) {
             if (tmdbResults.posters[0].file_path[0] === "/") {
                 let results = tmdbResults.posters.map(i => 'https://image.tmdb.org/t/p/' + posterSize + i.file_path);
                 for (let i = 0; i < results.length; i++) {
                     $('.artwork-options-list').append('<span class="poster"><a class="artwork-option media-poster-container" data-rating-key="' + results[i] + '" href="#"> <div class="media-poster"><img class="media-poster-image loaded" src="' + results[i].replace(posterSize, "w154") + '"></div> </a> </span>')
                 }
             }
-            if (fanartResults) {
+            if (fanartResults && fanartResults.movieposter){
                 if (fanartResults.movieposter.length != 0) {
                     let results = fanartResults.movieposter.map(i => i.url);
                     for (let i = 0; i < results.length; i++) {
@@ -94,19 +101,18 @@ $('body').arrive('.artwork-options-list', function () {
     }
 
     function updateBackgrounds() {
-        if (tmdbResults.backdrops.length != 0) {
+        if (!tmdbResults.results && tmdbResults.backdrops.length != 0) {
             if (tmdbResults.backdrops[0].file_path[0] === "/") {
                 let results = tmdbResults.backdrops.map(i => 'https://image.tmdb.org/t/p/' + backdropSize + i.file_path);
                 for (let i = 0; i < results.length; i++) {
                     $('.artwork-options-list').append('<span class="art"><a class="artwork-option media-poster-container" data-rating-key="' + results[i] + '" href="#"> <div class="media-poster"><img class="media-poster-image loaded" src="' + results[i].replace(posterSize, "w300") + '"></div> </a> </span>')
                 }
             }
-            // can't test yet....
-            if (fanartResults) {
+            if(fanartResults && fanartResults.moviebackground){
                 if (fanartResults.moviebackground.length != 0) {
                     let results = fanartResults.moviebackground.map(i => i.url);
                     for (let i = 0; i < results.length; i++) {
-                        $('.artwork-options-list').append('<span class="poster"><a class="artwork-option media-poster-container" data-rating-key="' + results[i] + '" href="#"> <div class="media-poster"><img class="media-poster-image loaded" src="' + results[i].replace("fanart/movies", "preview/movies") + '"></div> </a> </span>');
+                        $('.artwork-options-list').append('<span class="art"><a class="artwork-option media-poster-container" data-rating-key="' + results[i] + '" href="#"> <div class="media-poster"><img class="media-poster-image loaded" src="' + results[i].replace("fanart/movies", "preview/movies") + '"></div> </a> </span>');
                     }
                 }
             }
