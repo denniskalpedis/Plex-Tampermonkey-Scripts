@@ -3,7 +3,7 @@
 // @namespace   Plex.tv
 // @include     http*://<Private IP to access Plex>:32400/*
 // @include     http*://app.plex.tv/*
-// @version     1.2
+// @version     1.3
 // @grant       none
 // @updateURL    https://raw.githubusercontent.com/denniskalpedis/Plex-Tampermonkey-Scripts/master/collectionPosters.js
 // @downloadURL  https://raw.githubusercontent.com/denniskalpedis/Plex-Tampermonkey-Scripts/master/collectionPosters.js
@@ -22,12 +22,28 @@ const posterSize = "w342";
 const backdropSize = "original";
 let tmdbResults;
 let fanartResults;
+let summary;
 $('body').leave('.modal-dialog', function () {
     tmdbResults = undefined;
     fanartResults = undefined;
+    summary = undefined;
+});
+$('body').arrive('.modal-body-pane .edit-metadata-form', function () {
+    if($('.edit-metadata-form').children().length == 3 && $('.edit-metadata-form label').last().html() == "Summary"){
+        if (summary && $('#text-summary').html() == '') {
+            updateSummary();
+        } else if($('#text-summary').html() == '') {
+            hitAPIs(updateSummary);
+        } else if (!tmdbResults){
+            hitAPIs(function(){});
+        }
+        function updateSummary(){
+            $('#text-summary').html(summary);
+        }
+    }
 });
 $('body').arrive('.artwork-options-list', function () {
-    if ($('[data-pane="art"]').hasClass("selected") && $(".modal-nav-list").children().length === 6 && $.trim($(".modal-nav-list").children()[2].textContent) === "Poster") {
+    if ($('.art-btn').hasClass("selected") && $(".modal-nav-list").children().length === 6 && $.trim($(".modal-nav-list").children()[2].textContent) === "Poster") {
         if (tmdbResults) {
             updateBackgrounds();
         } else {
@@ -43,44 +59,10 @@ $('body').arrive('.artwork-options-list', function () {
             }
         }
     });
-    function hitAPIs(_callback) {
-        let name = encodeURI($(".modal-title").html().split("Edit ")[1]);
-        var settings = {
-            "async": true,
-            "crossDomain": true,
-            "url": "https://api.themoviedb.org/3/search/collection?api_key=" + tmdbAPI + "&language=" + language + "&query=" + name + "&page=1",
-            "method": "GET",
-            "headers": {}
-        }
-        $.ajax(settings).done(function (response) {
-            if(response.results.length > 0){
-                settings.url = "https://api.themoviedb.org/3/collection/" + response.results[0].id + "/images?api_key=" + tmdbAPI + "&language=null," + language;
-                $.ajax(settings).done(function (response) {
-                    tmdbResults = response;
-                    if (fanArt) {
-                        settings.url = "https://webservice.fanart.tv/v3/movies/" + response.id + "?api_key=" + fanArtAPI;
-                        $.ajax(settings).done(function (response) {
-                            fanartResults = response;
-                            _callback();
-                        }).fail(function(xhr, status, error){
-                            alert("ERROR! FanART API key giving error: " + xhr.status + "\nCheck key and if issue persists you might want to disable it.");
-                            _callback();
-                        });
-                    } else {
-                        _callback();
-                    }
-                });
-            } else {
-                tmdbResults = response;
-            }
-        }).fail(function(xhr, status, error){
-            alert("ERROR! TheMovieDB API key giving error: " + xhr.status + "\nYou need a valid key to get posters.");
-        });
-
-    }
+    
 
     function updatePosters() {
-        if (!tmdbResults.results && tmdbResults.posters.length != 0) {
+        if (tmdbResults != "nope" && !tmdbResults.results && tmdbResults.posters.length != 0) {
             if (tmdbResults.posters[0].file_path[0] === "/") {
                 let results = tmdbResults.posters.map(i => 'https://image.tmdb.org/t/p/' + posterSize + i.file_path);
                 for (let i = 0; i < results.length; i++) {
@@ -101,7 +83,7 @@ $('body').arrive('.artwork-options-list', function () {
     }
 
     function updateBackgrounds() {
-        if (!tmdbResults.results && tmdbResults.backdrops.length != 0) {
+        if (tmdbResults != "nope" && !tmdbResults.results && tmdbResults.backdrops.length != 0) {
             if (tmdbResults.backdrops[0].file_path[0] === "/") {
                 let results = tmdbResults.backdrops.map(i => 'https://image.tmdb.org/t/p/' + backdropSize + i.file_path);
                 for (let i = 0; i < results.length; i++) {
@@ -122,3 +104,51 @@ $('body').arrive('.artwork-options-list', function () {
     }
 
 });
+function hitAPIs(_callback, name = null) {
+    if (!name){
+        name = encodeURI($(".modal-title").html().split("Edit ")[1]);
+    }
+    var settings = {
+        "async": true,
+        "crossDomain": true,
+        "url": "https://api.themoviedb.org/3/search/collection?api_key=" + tmdbAPI + "&language=" + language + "&query=" + name + "&page=1",
+        "method": "GET",
+        "headers": {}
+    }
+    $.ajax(settings).done(function (response) {
+        if(response.results.length > 0){
+            summary = response.results[0].overview;
+            if(response.results.length > 0){
+                settings.url = "https://api.themoviedb.org/3/collection/" + response.results[0].id + "/images?api_key=" + tmdbAPI + "&language=null," + language;
+                $.ajax(settings).done(function (response) {
+                    tmdbResults = response;
+                    if (fanArt) {
+                        settings.url = "https://webservice.fanart.tv/v3/movies/" + response.id + "?api_key=" + fanArtAPI;
+                        $.ajax(settings).done(function (response) {
+                            fanartResults = response;
+                            _callback();
+                        }).fail(function(xhr, status, error){
+                            alert("ERROR! FanART API key giving error: " + xhr.status + "\nCheck key and if issue persists you might want to disable it.");
+                            _callback();
+                        });
+                    } else {
+                        _callback();
+                    }
+                });
+            } else {
+                tmdbResults = response;
+            }
+        } else {
+            var newName = prompt("Collection name not found. Enter name of collection to try again or cancel to not search again.", name);
+            if (newName == "" || newName === null) {
+                tmdbResults = "nope";
+                summary = " ";
+            } else {
+                hitAPIs(_callback, newName);
+            }
+        }
+    }).fail(function(xhr, status, error){
+        alert("ERROR! TheMovieDB API key giving error: " + xhr.status + "\nYou need a valid key to get posters.");
+    });
+
+}
