@@ -1,9 +1,9 @@
 // ==UserScript==
 // @name        plex Collection Posters
 // @namespace   Plex.tv
-// @version     1.5
 // @include     http*://<Private IP to access Plex>:32400/*
 // @include     http*://app.plex.tv/*
+// @version     1.5
 // @grant       none
 // @updateURL    https://raw.githubusercontent.com/denniskalpedis/Plex-Tampermonkey-Scripts/master/collectionPosters.js
 // @downloadURL  https://raw.githubusercontent.com/denniskalpedis/Plex-Tampermonkey-Scripts/master/collectionPosters.js
