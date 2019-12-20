@@ -3,7 +3,7 @@
 // @namespace   Plex.tv
 // @include     http*://<Private IP to access Plex>:32400/*
 // @include     http*://app.plex.tv/*
-// @version     1.3
+// @version     1.4
 // @grant       none
 // @updateURL    https://raw.githubusercontent.com/denniskalpedis/Plex-Tampermonkey-Scripts/master/collectionPosters.js
 // @downloadURL  https://raw.githubusercontent.com/denniskalpedis/Plex-Tampermonkey-Scripts/master/collectionPosters.js
@@ -15,6 +15,7 @@ const tmdbAPI = "<TheMovieDB API KEY HERE>";
 // set fanArt to false to not use it.
 const fanArt = false;
 const fanArtAPI = "<FanArt API KEY HERE>";
+const thePosterDB = true;
 const language = "en";
 // posible poster sizes w92, w154, w185, w342, w500, w780, original
 const posterSize = "w342";
@@ -77,7 +78,11 @@ $('body').arrive('.artwork-options-list', function () {
                     }
                 }
             }
-
+            if(TPDBResults.length > 0){
+                for (let i = 0; i < TPDBResults.length; i++) {
+                    $('.artwork-options-list').append('<span class="poster"><a class="artwork-option media-poster-container" data-rating-key="' + TPDBResults[i] + '" href="#"> <div class="media-poster"><img class="media-poster-image loaded" src="' + TPDBResults[i] + '"></div> </a> </span>');
+                }
+            }
         }
 
     }
@@ -131,7 +136,26 @@ function hitAPIs(_callback, name = null) {
                             alert("ERROR! FanART API key giving error: " + xhr.status + "\nCheck key and if issue persists you might want to disable it.");
                             _callback();
                         });
-                    } else {
+                    }
+                    if(thePosterDB){
+                        baseUrl = "https://cors-anywhere.herokuapp.com/https://theposterdb.com/search?page=1&term=";
+                        $.ajax({
+                            url: baseUrl + name + encodeURIComponent(" Collection"),
+                            type: "get",
+                            dataType: "",
+                            success: function(data) {
+                                id = $(data).find('button[data-poster-type="Collection"]')[0].dataset['posterId'];
+                                $.ajax({
+                                    url: "https://cors-anywhere.herokuapp.com/https://theposterdb.com/posters/" + id,
+                                    type: "get",
+                                    dataType: "",
+                                    success: function(imgData) {
+                                        $(imgData).find('picture:not([class]) img').each(function(){TPDBResults.push($(this).attr('src'));});
+                                    }
+                                });
+                            }
+                        });
+                    }else {
                         _callback();
                     }
                 });
