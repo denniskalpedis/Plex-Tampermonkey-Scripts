@@ -140,13 +140,13 @@ function hitAPIs(_callback, name = null) {
                     }
                     if(thePosterDB){
                         TPDBResults = [];
-                        baseUrl = "https://cors-anywhere.herokuapp.com/https://theposterdb.com/search?page=1&term=";
+                        let baseUrl = "https://cors-anywhere.herokuapp.com/https://theposterdb.com/search?page=1&term=";
                         $.ajax({
                             url: baseUrl + name + encodeURIComponent(" Collection"),
                             type: "get",
                             dataType: "",
                             success: function(data) {
-                                id = $(data).find('button[data-poster-type="Collection"]')[0].dataset['posterId'];
+                                let id = $(data).find('button[data-poster-type="Collection"]')[0].dataset['posterId'];
                                 $.ajax({
                                     url: "https://cors-anywhere.herokuapp.com/https://theposterdb.com/posters/" + id,
                                     type: "get",
