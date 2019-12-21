@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name        plex Collection Posters
 // @namespace   Plex.tv
-// @version     1.6
+// @version     1.7
 // @include     http*://<Private IP to access Plex>:32400/*
 // @include     http*://app.plex.tv/*
 // @grant       none
@@ -83,8 +83,8 @@ $('body').arrive('.artwork-options-list', function () {
                 for (let i = 0; i < TPDBResults.length; i++) {
                     $('.artwork-options-list').append('<span class="poster"><a class="artwork-option media-poster-container" data-rating-key="' + TPDBResults[i] + '" href="#"> <div class="media-poster"><img class="media-poster-image loaded" src="' + TPDBResults[i] + '"></div> </a> </span>');
                 }
-                TPDBResults = [];
             }
+            TPDBResults = [];
         }
 
     }
