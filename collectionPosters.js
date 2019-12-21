@@ -84,7 +84,6 @@ $('body').arrive('.artwork-options-list', function () {
                     $('.artwork-options-list').append('<span class="poster"><a class="artwork-option media-poster-container" data-rating-key="' + TPDBResults[i] + '" href="#"> <div class="media-poster"><img class="media-poster-image loaded" src="' + TPDBResults[i] + '"></div> </a> </span>');
                 }
             }
-            TPDBResults = [];
         }
 
     }
@@ -140,6 +139,7 @@ function hitAPIs(_callback, name = null) {
                         });
                     }
                     if(thePosterDB){
+                        TPDBResults = [];
                         baseUrl = "https://cors-anywhere.herokuapp.com/https://theposterdb.com/search?page=1&term=";
                         $.ajax({
                             url: baseUrl + name + encodeURIComponent(" Collection"),
