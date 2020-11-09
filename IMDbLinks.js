@@ -13,8 +13,6 @@
 
 $('body').arrive('button[aria-label="Play Trailer"]', function () {
     $('body').arrive("div[class^='CriticRating-container']", function () {
-
-        console.log("MOVIE");
         if($('[title="IMDb Rating"]').length > 0){
             $('[title="IMDb Rating"] div:first-child').attr('onClick', 'window.open(\'https://duckduckgo.com/?q=!ducky+site:imdb.com ' + $('div[class^="PrePlayLeftTitle-leftTitle"]')[0].innerText + ' ' + $('div[class^="PrePlayLeftTitle-leftTitle-Ev1KGW"]')[1].innerText + '\', \'_blank\')')
         }else {
