@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name        plex Collection Posters
 // @namespace   Plex.tv
-// @version     1.7
+// @version     1.8
 // @include     http*://<Private IP to access Plex>:32400/*
 // @include     http*://app.plex.tv/*
 // @grant       none
@@ -32,15 +32,16 @@ $('body').leave('.modal-dialog', function () {
 });
 $('body').arrive('.modal-body-pane .edit-metadata-form', function () {
     if($('.edit-metadata-form').children().length == 3 && $('.edit-metadata-form label').last().html() == "Summary"){
-        if (summary && $('#text-summary').html() == '') {
+        if (summary && $('#lockable-summary').html() == '') {
             updateSummary();
-        } else if($('#text-summary').html() == '') {
+        } else if($('#lockable-summary').html() == '') {
             hitAPIs(updateSummary);
         } else if (!tmdbResults){
             hitAPIs(function(){});
         }
         function updateSummary(){
-            $('#text-summary').html(summary);
+            $('#lockable-summary').html(summary);
+            $('#lockable-summary').val(summary).css('color','#f9be03');
         }
     }
 });
