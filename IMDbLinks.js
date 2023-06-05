@@ -29,15 +29,15 @@
         });
 
 
-$('span[title^="IMDb Rating "]').hover(
-    function () {
-        $('span[title^="IMDb Rating "]').css("background-color", "yellow");
-        $('span[title^="IMDb Rating "]').css('cursor','help');
-    },
-    function () {
-        $('span[title^="IMDb Rating "]').css("background-color", "rgba(0, 0, 0, 0.3)");
-    }
-);
+        $('span[title^="IMDb Rating "]').hover(
+            function () {
+                $('span[title^="IMDb Rating "]').css("background-color", "yellow");
+                $('span[title^="IMDb Rating "]').css('cursor','help');
+            },
+            function () {
+                $('span[title^="IMDb Rating "]').css("background-color", "rgba(0, 0, 0, 0.3)");
+            }
+        );
 
 
 
