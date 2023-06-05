@@ -1,25 +1,47 @@
+/* globals jQuery, $, waitForKeyElements */
 // ==UserScript==
 // @name        plex Movie IMDb Link
 // @namespace   Plex.tv
-// @version     1.1
-// @include     http*://<Private IP to access Plex>/*
-// @include     http*://app.plex.tv/*
+// @version     1.0
+// @match     http*://192.168.1.112:32400/*
 // @grant       none
-// @updateURL    https://raw.githubusercontent.com/denniskalpedis/Plex-Tampermonkey-Scripts/master/IMDbLinks.js
-// @downloadURL  https://raw.githubusercontent.com/denniskalpedis/Plex-Tampermonkey-Scripts/master/IMDbLinks.js
+// @description  add click for IMDB details
+// @updateURL    https://raw.githubusercontent.com/dauheeIRL/Plex-Tampermonkey-Scripts/master/IMDbLinks.js
+// @downloadURL  https://raw.githubusercontent.com/dauheeIRL/Plex-Tampermonkey-Scripts/master/IMDbLinks.js
 // @require     https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js
 // @require     https://raw.githubusercontent.com/uzairfarooq/arrive/master/minified/arrive.min.js
 // ==/UserScript==
 
-$('body').arrive('button[data-qa-id="preplay-trailer"]', function () {
-    $('body').arrive("div[class^='CriticRating-container']", function () {
-        if($('[title="IMDb Rating"]').length > 0){
-            $('[title="IMDb Rating"] div:first-child').attr('onClick', 'window.open(\'https://duckduckgo.com/?q=!ducky+site:imdb.com ' + $('div[class^="PrePlayLeftTitle-leftTitle"]')[0].innerText.replace('\'', '') + ' ' + $('div[data-qa-id="preplay-secondTitle"]')[0].innerText + '\', \'_blank\')')
-        }else {
-            $("div[class^='CriticRating-container'] div:first-child").first().append('<div class="CriticRating-rating-2Jrl15" title="IMDb Rating" style="margin-left: 1em;"><div class="CriticRating-imdb-23PVnW CriticRating-ratingImage-3-Lxod" onclick="window.open(\'https://duckduckgo.com/?q=!ducky+site:imdb.com ' + $('div[class^="PrePlayLeftTitle-leftTitle"]')[0].innerText.replace('\'', '') + ' ' + $('div[data-qa-id="preplay-secondTitle"]')[0].innerText + '\', \'_blank\')"></div>&nbsp;&nbsp;</div>');
-        }
+(function($) {
+    'use strict';
+
+    $('body').arrive('button[data-testid="preplay-trailer"]', function () {
+
+        $( document ).ready(function() {
+            if($('[title^="IMDb Rating"]').length > 0){
+                var strDetails = $('a[class^="PosterCardLink-link-"]').attr('aria-label');
+                var astrDetails = strDetails.split(', ');
+
+                $('[title^="IMDb Rating"] span:first-child').attr('onClick', 'window.open("https://www.imdb.com/search/title/?title=' + astrDetails[0] + '&year=' + astrDetails[1] + '&adult=include", \'_blank\')');
+
+            }
+
+        });
+
+
+$('span[title^="IMDb Rating "]').hover(
+    function () {
+        $('span[title^="IMDb Rating "]').css("background-color", "yellow");
+        $('span[title^="IMDb Rating "]').css('cursor','help');
+    },
+    function () {
+        $('span[title^="IMDb Rating "]').css("background-color", "rgba(0, 0, 0, 0.3)");
+    }
+);
+
+
+
     });
-    $('body').leave('button[aria-label="Play Trailer"]', function () {
-        $('body').unbindArrive("div[class^='CriticRating-container']");
-    });
-});
+
+
+})(jQuery);
