@@ -23,6 +23,11 @@
             if($('[title^="IMDb Rating"]').length > 0){
 
                 var lastpos = strDetails.lastIndexOf(', ') + 2;
+                var pagelink = $('img[style^="position: absolute; width: 100%; height: 100%; object-fit: cover; opacity: 1;"]').attr('src');
+                var movieid = pagelink.split('metadata%2F')[1].split('%2Fthumb')[0];
+                var plextoken = pagelink.split('&X-Plex-Token=')[1];
+
+
                 //var strPlexToken = $('a[target^="downloadFileFrame"]').attr('href').split('?download=1&')[1];
 
                 $('[title^="IMDb Rating"] span:first-child').attr('onClick', 'window.open("https://www.imdb.com/search/title/?title=' + strDetails.substr(0, lastpos - 2).replaceAll(' ', '+') + '&year=' + strDetails.slice(lastpos) + '&adult=include", \'_blank\')');
@@ -60,6 +65,11 @@
             }
 
         });
+
+
+
+
+
 
     });
 
