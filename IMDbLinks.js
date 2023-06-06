@@ -56,7 +56,6 @@
             }
         );
 
-
     }
 
     $('body').arrive('button[data-testid="preplay-trailer"]', function () {
@@ -65,6 +64,8 @@
 
             var strDetails = $('a[class^="PosterCardLink-link-"]').attr('aria-label');
             if($('[title^="IMDb Rating"]').length > 0){
+                //we are looking at movie
+
                 var lastpos = strDetails.lastIndexOf(', ') + 2;
 
                 $('[title^="IMDb Rating"] span:first-child').attr('onClick', 'window.open("https://www.imdb.com/search/title/?title=' + strDetails.substr(0, lastpos - 2).replaceAll(' ', '+') + '&year=' + strDetails.slice(lastpos) + '&adult=include", \'_blank\')');
@@ -79,9 +80,10 @@
                     }
                 );
 
-                setTimeout(LoadMovieLocation, 2000);
+                setTimeout(LoadMovieLocation, 1500);
 
             }else if($('[title^="TMDB Rating"]').length > 0){
+                //we are looking at TV series
 
                 $('[title^="TMDB Rating"] span:first-child').attr('onClick', 'window.open("https://www.imdb.com/search/title/?title=' + strDetails + '&year=' + $('span[class^="ineka90 ineka9v ineka99 _1duebfhfy"]')[0].innerText + '&adult=include", \'_blank\')');
 
