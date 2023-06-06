@@ -68,7 +68,7 @@
 
                 var lastpos = strDetails.lastIndexOf(', ') + 2;
 
-                $('[title^="IMDb Rating"] span:first-child').attr('onClick', 'window.open("https://www.imdb.com/search/title/?title=' + strDetails.substr(0, lastpos - 2).replaceAll(' ', '+') + '&year=' + strDetails.slice(lastpos) + '&adult=include", \'_blank\')');
+                $('[title^="IMDb Rating"] span:first-child').attr('onClick', 'window.open("https://www.imdb.com/search/title/?title=' + strDetails.substr(0, lastpos - 2).replaceAll(' ', '+') + '&release_date=' + (strDetails.slice(lastpos) - 1) + '-01-01,' + (parseInt(strDetails.slice(lastpos)) + 1) + '-01-01&adult=include&sort=release_date,desc", \'_blank\')');
 
                 $('span[title^="IMDb Rating "]').hover(
                     function () {
