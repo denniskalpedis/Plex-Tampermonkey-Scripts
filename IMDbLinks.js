@@ -15,20 +15,57 @@
 (function($) {
     'use strict';
 
+    function getPosition(string, subString, index) {
+        return string.split(subString, index).join(subString).length;
+    }
+    function LoadMovieLocation(){
+
+        const strTitleHeader = 'h1[class^="ineka90 ineka9v ineka96 ineka9z _1duebfhfy"]';
+
+        var pagelink = $('img[style^="position: absolute; width: 100%; height: 100%; object-fit: cover; opacity: 1;"]').attr('src');
+        var movieid = pagelink.split('metadata%2F')[1].split('%2Fthumb')[0];
+        var plextoken = pagelink.split('&X-Plex-Token=')[1];
+        var fetchlink = pagelink.substr(0, getPosition(pagelink, '/', 3)) + '/library/metadata/' + movieid + '?X-Plex-Token=' + plextoken;
+
+        $.get( fetchlink, function( data ) {
+
+            var strPlexData = new XMLSerializer().serializeToString(data.documentElement);
+            strPlexData = strPlexData.split(' file="')[1].split(" size=")[0].slice(0, -1);
+
+            pagelink = pagelink.substr(getPosition(pagelink, '/', 2) + 1); //chop off http bit
+            pagelink = pagelink.substr(0, pagelink.indexOf(":")); //chop off the protocol bit
+
+            strPlexData = "\\\\" + pagelink + "\\Media\\" + strPlexData.substr(getPosition(strPlexData, '/', 4) + 1);
+
+            strPlexData = strPlexData.substr(0, strPlexData.lastIndexOf('/')); //just want to folder not the file as might delete
+
+            $(strTitleHeader).on("click", function() {
+                navigator.clipboard.writeText(strPlexData);
+                $(strTitleHeader).css("background-color", "green");
+            });
+
+        });
+
+        $(strTitleHeader).hover(
+            function () {
+                $(strTitleHeader).css("background-color", "black");
+                $(strTitleHeader).css('cursor','help');
+            },
+            function () {
+                $(strTitleHeader).css("background-color", "rgba(0, 0, 0, 0.3)");
+            }
+        );
+
+
+    }
+
     $('body').arrive('button[data-testid="preplay-trailer"]', function () {
 
         $( document ).ready(function() {
 
             var strDetails = $('a[class^="PosterCardLink-link-"]').attr('aria-label');
             if($('[title^="IMDb Rating"]').length > 0){
-
                 var lastpos = strDetails.lastIndexOf(', ') + 2;
-                var pagelink = $('img[style^="position: absolute; width: 100%; height: 100%; object-fit: cover; opacity: 1;"]').attr('src');
-                var movieid = pagelink.split('metadata%2F')[1].split('%2Fthumb')[0];
-                var plextoken = pagelink.split('&X-Plex-Token=')[1];
-
-
-                //var strPlexToken = $('a[target^="downloadFileFrame"]').attr('href').split('?download=1&')[1];
 
                 $('[title^="IMDb Rating"] span:first-child').attr('onClick', 'window.open("https://www.imdb.com/search/title/?title=' + strDetails.substr(0, lastpos - 2).replaceAll(' ', '+') + '&year=' + strDetails.slice(lastpos) + '&adult=include", \'_blank\')');
 
@@ -42,11 +79,7 @@
                     }
                 );
 
-                //var strPlexLink = $('a[target^="downloadFileFrame"]').attr('href').split('?download=1&').split('/library/parts/')[0] + '&' + strPlexToken;
-                //let strPlexPage = fetch(strPlexLink);
-                //alert(strPlexPage.split(' file="')[1].split(" size=")[0]);
-
-
+                setTimeout(LoadMovieLocation, 2000);
 
             }else if($('[title^="TMDB Rating"]').length > 0){
 
@@ -65,11 +98,6 @@
             }
 
         });
-
-
-
-
-
 
     });
 
