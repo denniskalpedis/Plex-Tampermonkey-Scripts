@@ -78,7 +78,7 @@
         setTimeout(LoadMovieLocation, 1500);
     }
 
-    $('body').arrive('button[data-testid="preplay-trailer"]', function () {
+    $('body').arrive('button[data-testid="preplay-play"]', function () {
 
         $( document ).ready(function() {
 
