@@ -1,4 +1,4 @@
-/* globals jQuery, $, waitForKeyElements */
+/* globals jQuery, $ */
 // ==UserScript==
 // @name        check if already have movie on yts
 // @namespace   yts checker
@@ -13,10 +13,6 @@
 
 (function($) {
     'use strict';
-
-    function getPosition(string, subString, index) {
-        return string.split(subString, index).join(subString).length;
-    }
 
     function LoadMovieLocation(){
         const PLEX_TOKEN = 'xxxxx';
