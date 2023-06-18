@@ -14,44 +14,34 @@
 (function($) {
     'use strict';
 
-    function LoadMovieLocation(){
-        const PLEX_TOKEN = 'xx';
-        const PLEX_SERVER = 'xx';
-        var strMovieName = $('h1')[0].innerText;
-        var strYear = $('h2')[0].innerText; //$('h1')[0].baseURI;
+    function CheckMovie(strSection, TOKEN, SERVER, strMovieName, strYear){
 
-        var fetchDownloadLink = 'https://' + PLEX_SERVER + '/library/sections/4/all?X-Plex-Token=' + PLEX_TOKEN + '&year=' +strYear + '&title=' + strMovieName; //kids
-
-        $.get( fetchDownloadLink, function( data ) {
+        $.get( 'https://' + SERVER + '/library/sections/' + strSection + '/all?X-Plex-Token=' + TOKEN + '&year=' +strYear + '&title=' + strMovieName, function( data ) {
 
             var strPlexData = new XMLSerializer().serializeToString(data.documentElement);
 
             if (strPlexData.length > 450){
                 var strVideoQual = strPlexData.split('videoResolution="')[1].split('"')[0]
-                $('h1').after('<h2 style="background-color:yellow;color:red">ADULTS MOVIE (' + strVideoQual + ')</h2>');
-            }
-
-        });
-
-        fetchDownloadLink = 'https://' + PLEX_SERVER + '/library/sections/1/all?X-Plex-Token=' + PLEX_TOKEN + '&year=' +strYear + '&title=' + strMovieName; //adults
-
-        $.get( fetchDownloadLink, function( data ) {
-
-            var strPlexData = new XMLSerializer().serializeToString(data.documentElement);
-
-            if (strPlexData.length > 450){
-                var strVideoQual = strPlexData.split('videoResolution="')[1].split('"')[0]
-
-                $('h1').after('<h2 style="background-color:yellow;color:red">ADULTS MOVIE (' + strVideoQual + ')</h2>');
+                $('h1').after('<h2 style="background-color:yellow;color:red">' + ((strSection == 4) ? 'KIDS' : 'ADULT') + ' section (' + strVideoQual + ')</h2>');
             }
 
         });
 
     }
 
-    $( document ).ready(function() {
-        setTimeout(LoadMovieLocation, 1000);
-    });
+    function CheckPLEXForMovie(){
+        const PLEX_TOKEN = 'xx';
+        const PLEX_SERVER = 'xx';
+        var strMovieName = $('h1')[0].innerText;
+        var strYear = $('h2')[0].innerText;
 
+        CheckMovie(1, PLEX_TOKEN, PLEX_SERVER, strMovieName, strYear);
+        CheckMovie(4, PLEX_TOKEN, PLEX_SERVER, strMovieName, strYear);
+
+    }
+
+    $( document ).ready(function() {
+        setTimeout(CheckPLEXForMovie, 1000);
+    });
 
 })(jQuery);
