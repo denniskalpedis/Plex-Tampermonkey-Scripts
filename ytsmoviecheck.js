@@ -1,6 +1,6 @@
 /* globals jQuery, $ */
 // ==UserScript==
-// @name        check if already have movie on yts
+// @name        check if individual yts movie already in plex
 // @namespace   yts checker
 // @version     1.0
 // @match     http*://yts.torrentbay.net/movies/*
@@ -30,8 +30,8 @@
     }
 
     function CheckPLEXForMovie(){
-        const PLEX_TOKEN = 'xx';
-        const PLEX_SERVER = 'xx';
+        const PLEX_TOKEN = 'yMsAwX4HJ31TEdsfNbMy';
+        const PLEX_SERVER = '192.168.1.112:32400';
         var strMovieName = $('h1')[0].innerText;
         var strYear = $('h2')[0].innerText;
 
