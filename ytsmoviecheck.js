@@ -15,8 +15,8 @@
     'use strict';
 
     function LoadMovieLocation(){
-        const PLEX_TOKEN = 'xxxxx';
-        const PLEX_SERVER = 'xxxxxxx';
+        const PLEX_TOKEN = 'xx';
+        const PLEX_SERVER = 'xxx';
         var strMovieName = $('h1')[0].innerText;
         var strYear = $('h2')[0].innerText; //$('h1')[0].baseURI;
 
@@ -33,7 +33,7 @@
 
         });
 
-        fetchDownloadLink = 'https://192.168.1.112:32400/library/sections/1/all?X-Plex-Token=yMsAwX4HJ31TEdsfNbMy&year=' +strYear + '&title=' + strMovieName; //adults
+        var fetchDownloadLink = 'https://' + PLEX_SERVER + '/library/sections/1/all?X-Plex-Token=' + PLEX_TOKEN + '&year=' +strYear + '&title=' + strMovieName; //adults
 
         $.get( fetchDownloadLink, function( data ) {
 
