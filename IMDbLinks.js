@@ -2,7 +2,7 @@
 // ==UserScript==
 // @name        plex Movie IMDb Link
 // @namespace   Plex.tv
-// @version     1.0
+// @version     1.1
 // @match     http*://192.168.1.112:32400/*
 // @grant       none
 // @description  add click for IMDB details, also click title to copy file location
@@ -21,7 +21,7 @@
 
     function LoadMovieLocation(){
 
-        const strTitleHeader = 'h1[class^="ineka90 ineka9v ineka96 ineka9z _1duebfhfy"]';
+        const strTitleHeader = 'h1[data-testid="metadata-title"]';
 
         var currentpagelink = $('img[style^="position: absolute; width: 100%; height: 100%; object-fit: cover; opacity: 1;"]').attr('src');
         var movieid = currentpagelink.split('metadata%2F')[1].split('%2Fthumb')[0];
