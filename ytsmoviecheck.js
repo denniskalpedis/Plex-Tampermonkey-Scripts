@@ -16,7 +16,7 @@
 
     function CheckMovie(strSection, TOKEN, SERVER, strMovieName, strYear){
 
-        $.get( 'https://' + SERVER + '/library/sections/' + strSection + '/all?X-Plex-Token=' + TOKEN + '&year=' +strYear + '&title=' + strMovieName, function( data ) {
+        $.get( 'https://' + SERVER + '/library/sections/' + strSection + '/all?X-Plex-Token=' + TOKEN + '&year=' +strYear + '&title=' + encodeURI(strMovieName), function( data ) {
 
             var strPlexData = new XMLSerializer().serializeToString(data.documentElement);
 
@@ -28,7 +28,7 @@
         });
 
         //sometimes can be a year out in plex so go before and after
-        $.get( 'https://' + SERVER + '/library/sections/' + strSection + '/all?X-Plex-Token=' + TOKEN + '&year=' + (parseInt(strYear) + 1) + '&title=' + strMovieName, function( data ) {
+        $.get( 'https://' + SERVER + '/library/sections/' + strSection + '/all?X-Plex-Token=' + TOKEN + '&year=' + (parseInt(strYear) + 1) + '&title=' + encodeURI(strMovieName), function( data ) {
 
             var strPlexData = new XMLSerializer().serializeToString(data.documentElement);
 
@@ -39,7 +39,7 @@
 
         });
 
-        $.get( 'https://' + SERVER + '/library/sections/' + strSection + '/all?X-Plex-Token=' + TOKEN + '&year=' + (parseInt(strYear) - 1) + '&title=' + strMovieName, function( data ) {
+        $.get( 'https://' + SERVER + '/library/sections/' + strSection + '/all?X-Plex-Token=' + TOKEN + '&year=' + (parseInt(strYear) - 1) + '&title=' + encodeURI(strMovieName), function( data ) {
 
             var strPlexData = new XMLSerializer().serializeToString(data.documentElement);
 
