@@ -27,6 +27,28 @@
 
         });
 
+       $.get( 'https://' + SERVER + '/library/sections/' + strSection + '/all?X-Plex-Token=' + TOKEN + '&year=' + parseInt(strYear + 1) + '&title=' + strMovieName, function( data ) {
+
+            var strPlexData = new XMLSerializer().serializeToString(data.documentElement);
+
+            if (strPlexData.length > 450){
+                var strVideoQual = strPlexData.split('videoResolution="')[1].split('"')[0]
+                $('div[class="browse-movie-year"]')[intIndex].innerHTML = '<div style="background-color:red;color:black">' + $('div[class="browse-movie-year"]')[intIndex].innerText + ' - (' + strVideoQual + ')</div>'
+            }
+
+        });
+
+        $.get( 'https://' + SERVER + '/library/sections/' + strSection + '/all?X-Plex-Token=' + TOKEN + '&year=' + parseInt(strYear - 1) + '&title=' + strMovieName, function( data ) {
+
+            var strPlexData = new XMLSerializer().serializeToString(data.documentElement);
+
+            if (strPlexData.length > 450){
+                var strVideoQual = strPlexData.split('videoResolution="')[1].split('"')[0]
+                $('div[class="browse-movie-year"]')[intIndex].innerHTML = '<div style="background-color:red;color:black">' + $('div[class="browse-movie-year"]')[intIndex].innerText + ' - (' + strVideoQual + ')</div>'
+            }
+
+        });
+
     }
 
     function CheckPLEXForMovies(){
