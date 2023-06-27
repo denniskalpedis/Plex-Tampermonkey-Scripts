@@ -1,13 +1,13 @@
 /* globals jQuery, $ */
 // ==UserScript==
-// @name        check if individual yts movie already in plex
+// @name        check if already have movie on yts
 // @namespace   yts checker
 // @version     1.0
 // @match     http*://yts.torrentbay.net/movies/*
 // @grant       none
 // @description  check if yts movie is already downloaded into plex
-// @updateURL    https://raw.githubusercontent.com/dauheeIRL/Plex-Tampermonkey-Scripts/master/ytsmoviecheck.js
-// @downloadURL  https://raw.githubusercontent.com/dauheeIRL/Plex-Tampermonkey-Scripts/master/ytsmoviecheck.js
+// @updateURL    https://raw.githubusercontent.com/dauheeIRL/Plex-Tampermonkey-Scripts/master/ytsALLmoviecheck.js
+// @downloadURL  https://raw.githubusercontent.com/dauheeIRL/Plex-Tampermonkey-Scripts/master/ytsALLmoviecheck.js
 // @require     https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js
 // ==/UserScript==
 
@@ -17,6 +17,29 @@
     function CheckMovie(strSection, TOKEN, SERVER, strMovieName, strYear){
 
         $.get( 'https://' + SERVER + '/library/sections/' + strSection + '/all?X-Plex-Token=' + TOKEN + '&year=' +strYear + '&title=' + strMovieName, function( data ) {
+
+            var strPlexData = new XMLSerializer().serializeToString(data.documentElement);
+
+            if (strPlexData.length > 450){
+                var strVideoQual = strPlexData.split('videoResolution="')[1].split('"')[0]
+                $('h1').after('<h2 style="background-color:yellow;color:red">' + ((strSection == 4) ? 'KIDS' : 'ADULT') + ' section (' + strVideoQual + ')</h2>');
+            }
+
+        });
+
+        //sometimes can be a year out in plex so go before and after
+        $.get( 'https://' + SERVER + '/library/sections/' + strSection + '/all?X-Plex-Token=' + TOKEN + '&year=' + (parseInt(strYear) + 1) + '&title=' + strMovieName, function( data ) {
+
+            var strPlexData = new XMLSerializer().serializeToString(data.documentElement);
+
+            if (strPlexData.length > 450){
+                var strVideoQual = strPlexData.split('videoResolution="')[1].split('"')[0]
+                $('h1').after('<h2 style="background-color:yellow;color:red">' + ((strSection == 4) ? 'KIDS' : 'ADULT') + ' section (' + strVideoQual + ')</h2>');
+            }
+
+        });
+
+        $.get( 'https://' + SERVER + '/library/sections/' + strSection + '/all?X-Plex-Token=' + TOKEN + '&year=' + (parseInt(strYear) - 1) + '&title=' + strMovieName, function( data ) {
 
             var strPlexData = new XMLSerializer().serializeToString(data.documentElement);
 
