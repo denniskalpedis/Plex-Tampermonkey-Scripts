@@ -52,8 +52,8 @@
     }
 
     function CheckPLEXForMovies(){
-        const PLEX_TOKEN = 'yMsAwX4HJ31TEdsfNbMy';
-        const PLEX_SERVER = '192.168.1.112:32400';
+        const PLEX_TOKEN = 'xx';
+        const PLEX_SERVER = xx';
 
         for (let i=0; i < $('a[class="browse-movie-title"]').length; i++) {
             CheckMovie(1, PLEX_TOKEN, PLEX_SERVER, i, $('a[class="browse-movie-title"]')[i].innerText, $('div[class="browse-movie-year"]')[i].innerText);
