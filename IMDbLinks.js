@@ -66,11 +66,11 @@
         var strYear;
 
         if($('[title^="TMDB Rating"]').length > 0){
-            strYear = $('span[data-testid^="metadata-line1"]')[0].innerText;
+            strYear = $('span[data-testid^="metadata-line1"]')[0].innerText;9
         } else {
             var lastpos = strMovieName.lastIndexOf(', ') + 2;
             strYear = strMovieName.slice(lastpos);
-            strMovieName = strMovieName.substr(0, lastpos - 2);
+            strMovieName = strMovieName.substr(0, lastpos - 2).replace(' (' + strYear + ')', '');
         }
 
         //$('[title^="IMDb Rating"]' + ' span:first-child') '[title^="Rotten Tomatoes Audience Rating "]'
