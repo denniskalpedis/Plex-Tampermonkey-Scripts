@@ -2,7 +2,7 @@
 // ==UserScript==
 // @name        plex Movie IMDb Link
 // @namespace   Plex.tv
-// @version     1.1
+// @version     1.0
 // @match     http*://192.168.1.112:32400/*
 // @grant       none
 // @description  add click for IMDB details, also click title to copy file location
@@ -59,56 +59,41 @@
 
     }
 
-    function HandleMovie(strType, strMovieName){
+    function HandleRating(){
 
-        var lastpos = strMovieName.lastIndexOf(', ') + 2;
+        var strRatingSection = 'div[data-testid^="metadata-ratings"]';
+        var strMovieName = $('a[class^="PosterCardLink-link-"]').attr('aria-label');
+        var strYear;
 
-        $(strType + ' span:first-child').attr('onClick', 'window.open("https://www.imdb.com/search/title/?title=' + strMovieName.substr(0, lastpos - 2).replaceAll(' ', '+') + '&release_date=' + (strMovieName.slice(lastpos) - 1) + '-01-01,' + (parseInt(strMovieName.slice(lastpos)) + 1) + '-01-01&adult=include&sort=year,desc", \'_blank\')');
+        if($('[title^="TMDB Rating"]').length > 0){
+            strYear = $('span[data-testid^="metadata-line1"]')[0].innerText;
+        } else {
+            var lastpos = strMovieName.lastIndexOf(', ') + 2;
+            strYear = strMovieName.slice(lastpos);
+            strMovieName = strMovieName.substr(0, lastpos - 2);
+        }
 
-        $('span' + strType).hover(
+        //$('[title^="IMDb Rating"]' + ' span:first-child') '[title^="Rotten Tomatoes Audience Rating "]'
+        $(strRatingSection).attr('onClick', 'window.open("https://www.imdb.com/search/title/?title=' + strMovieName.replaceAll(' ', '+') + '&release_date=' + (parseInt(strYear) - 1) + '-01-01,' + (parseInt(strYear) + 1) + '-01-01&adult=include&sort=year,desc", \'_blank\')');
+
+        $(strRatingSection).hover(
             function () {
-                $('span' + strType).css("background-color", "yellow");
-                $('span' + strType).css('cursor','help');
+                $(strRatingSection).css("background-color", "yellow");
+                $(strRatingSection).css('cursor','help');
             },
             function () {
-                $('span' + strType).css("background-color", "rgba(0, 0, 0, 0.3)");
+                $(strRatingSection).css("background-color", "rgba(0, 0, 0, 0.3)");
             }
         );
 
-        setTimeout(LoadMovieLocation, 1500);
+        LoadMovieLocation();
     }
 
     $('body').arrive('button[data-testid="preplay-play"]', function () {
 
         $( document ).ready(function() {
 
-            var strMovieName = $('a[class^="PosterCardLink-link-"]').attr('aria-label');
-            var lastpos;
-            if($('[title^="IMDb Rating"]').length > 0){
-                //we are looking at movie
-                HandleMovie('[title^="IMDb Rating"]', strMovieName);
-
-            }else if($('[title^="Rotten Tomatoes Audience Rating "]').length > 0){
-                //we are looking at movie
-
-                HandleMovie('[title^="Rotten Tomatoes Audience Rating "]', strMovieName);
-
-            }else if($('[title^="TMDB Rating"]').length > 0){
-                //we are looking at TV series
-
-                $('[title^="TMDB Rating"] span:first-child').attr('onClick', 'window.open("https://www.imdb.com/search/title/?title=' + strMovieName + '&year=' + $('span[class^="ineka90 ineka9v ineka99 _1duebfhfy"]')[0].innerText + '&adult=include", \'_blank\')');
-
-                $('span[title^="TMDB Rating "]').hover(
-                    function () {
-                        $('span[title^="TMDB Rating "]').css("background-color", "yellow");
-                        $('span[title^="TMDB Rating "]').css('cursor','help');
-                    },
-                    function () {
-                        $('span[title^="TMDB Rating "]').css("background-color", "rgba(0, 0, 0, 0.3)");
-                    }
-                );
-
-            }
+            setTimeout(HandleRating, 1000);
 
         });
 
