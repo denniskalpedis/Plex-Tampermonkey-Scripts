@@ -27,7 +27,7 @@
 
         });
 
-       $.get( 'https://' + SERVER + '/library/sections/' + strSection + '/all?X-Plex-Token=' + TOKEN + '&year=' + parseInt(strYear) + 1 + '&title=' + encodeURIComponent(strMovieName), function( data ) {
+       $.get( 'https://' + SERVER + '/library/sections/' + strSection + '/all?X-Plex-Token=' + TOKEN + '&year=' + (parseInt(strYear) + 1) + '&title=' + encodeURIComponent(strMovieName), function( data ) {
 
             var strPlexData = new XMLSerializer().serializeToString(data.documentElement);
 
@@ -38,7 +38,7 @@
 
         });
 
-        $.get( 'https://' + SERVER + '/library/sections/' + strSection + '/all?X-Plex-Token=' + TOKEN + '&year=' + parseInt(strYear) - 1 + '&title=' + encodeURIComponent(strMovieName), function( data ) {
+        $.get( 'https://' + SERVER + '/library/sections/' + strSection + '/all?X-Plex-Token=' + TOKEN + '&year=' + (parseInt(strYear) - 1) + '&title=' + encodeURIComponent(strMovieName), function( data ) {
 
             var strPlexData = new XMLSerializer().serializeToString(data.documentElement);
 
