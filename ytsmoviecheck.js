@@ -53,8 +53,8 @@
     }
 
     function CheckPLEXForMovie(){
-        const PLEX_TOKEN = 'yMsAwX4HJ31TEdsfNbMy';
-        const PLEX_SERVER = '192.168.1.112:32400';
+        const PLEX_TOKEN = 'x';
+        const PLEX_SERVER = xx';
         var strMovieName = $('h1')[0].innerText;
         var strYear = $('h2')[0].innerText;
 
