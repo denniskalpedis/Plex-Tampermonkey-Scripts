@@ -35,7 +35,7 @@
 
             var strPlexData = new XMLSerializer().serializeToString(data.documentElement);
 
-            if($('[title^="IMDb Rating"]').length > 0){
+            if(($('[title^="IMDb Rating"]').length > 0)|($('[title^="Rotten Tomatoes"]').length > 0)){
 
                 //get the file portion and remove last slash
                 strPlexData = strPlexData.split(' file="')[1].split(" size=")[0].slice(0, -1);
@@ -91,7 +91,7 @@
         var strMovieName = $('a[class^="PosterCardLink-link-"]').attr('aria-label');
         var strYear;
 
-        if($('[title^="IMDb Rating"]').length > 0){
+        if(($('[title^="IMDb Rating"]').length > 0)|($('[title^="Rotten Tomatoes"]').length > 0)){
             var lastpos = strMovieName.lastIndexOf(', ') + 2;
             strYear = strMovieName.slice(lastpos);
             strMovieName = strMovieName.substr(0, lastpos - 2);
