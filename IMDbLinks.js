@@ -1,14 +1,14 @@
 /* globals jQuery, $, waitForKeyElements */
 // ==UserScript==
-// @name        plex Movie IMDb Link
+// @name        plex IMDb Link and SMB Share
 // @namespace   Plex.tv
-// @version     1.0
+// @version     1.1
 // @match     http*://192.168.1.112:32400/*
 // @grant       none
 // @description  add click for IMDB details, also click title to copy file location
 // @updateURL    https://raw.githubusercontent.com/dauheeIRL/Plex-Tampermonkey-Scripts/master/IMDbLinks.js
 // @downloadURL  https://raw.githubusercontent.com/dauheeIRL/Plex-Tampermonkey-Scripts/master/IMDbLinks.js
-// @require     https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js
+// @require     https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js
 // @require     https://raw.githubusercontent.com/uzairfarooq/arrive/master/minified/arrive.min.js
 // ==/UserScript==
 
@@ -28,17 +28,30 @@
         var plextoken = currentpagelink.split('&X-Plex-Token=')[1];
         var fetchDownloadLink = currentpagelink.substr(0, getPosition(currentpagelink, '/', 3)) + '/library/metadata/' + movieid + '?X-Plex-Token=' + plextoken;
 
+        currentpagelink = currentpagelink.substr(getPosition(currentpagelink, '/', 2) + 1); //chop off http bit
+        currentpagelink = currentpagelink.substr(0, currentpagelink.indexOf(":")); //chop off the protocol bit
+
         $.get( fetchDownloadLink, function( data ) {
 
             var strPlexData = new XMLSerializer().serializeToString(data.documentElement);
-            strPlexData = strPlexData.split(' file="')[1].split(" size=")[0].slice(0, -1);
 
-            currentpagelink = currentpagelink.substr(getPosition(currentpagelink, '/', 2) + 1); //chop off http bit
-            currentpagelink = currentpagelink.substr(0, currentpagelink.indexOf(":")); //chop off the protocol bit
+            if($('[title^="TMDB Rating"]').length > 0){
 
-            strPlexData = "\\\\" + currentpagelink + "\\Media\\" + strPlexData.substr(getPosition(strPlexData, '/', 4) + 1); //SMB format for windows
+                //split by file location
+                strPlexData = strPlexData.split(' path="');
+                //in reverse order so get last file
+                strPlexData = strPlexData[strPlexData.length - 1].split('"')[0];
+                //chop of part as not required for SMB
+                strPlexData = strPlexData.split('/share/external/DEV3302_1/')[1];
+                strPlexData = "\\\\" + currentpagelink + "\\USBDrive1\\" + strPlexData //SMB format for windows
 
-            strPlexData = strPlexData.substr(0, strPlexData.lastIndexOf('/')); //just want to folder not the file as might delete
+            } else {
+                //get the file portion and remove last slash
+                strPlexData = strPlexData.split(' file="')[1].split(" size=")[0].slice(0, -1);
+                strPlexData = "\\\\" + currentpagelink + "\\Media\\" + strPlexData.substr(getPosition(strPlexData, '/', 4) + 1); //SMB format for windows
+                strPlexData = strPlexData.substr(0, strPlexData.lastIndexOf('/')); //just want to folder not the file as might delete
+
+            }
 
             $(strTitleHeader).on("click", function() {
                 navigator.clipboard.writeText(strPlexData);
@@ -66,7 +79,8 @@
         var strYear;
 
         if($('[title^="TMDB Rating"]').length > 0){
-            strYear = $('span[data-testid^="metadata-line1"]')[0].innerText;9
+            //tv series
+            strYear = $('span[data-testid^="metadata-line1"]')[0].innerText;
         } else {
             var lastpos = strMovieName.lastIndexOf(', ') + 2;
             strYear = strMovieName.slice(lastpos);
