@@ -20,7 +20,7 @@
 
             var strPlexData = new XMLSerializer().serializeToString(data.documentElement);
 
-            if (strPlexData.length > 450){
+            if ((strPlexData.length > 450)&&(strPlexData.includes($('h1')[0].innerText))){
                 var strVideoQual = ' (unknown video quality)';
                 if(strPlexData.includes('videoResolution="')){
                     strVideoQual = ' (' + strPlexData.split('videoResolution="')[1].split('"')[0] + ')';
@@ -33,8 +33,8 @@
     }
 
     function CheckPLEXForMovies(){
-        const PLEX_TOKEN = 'xx';
-        const PLEX_SERVER = '192.168.1.xx:32400';
+        const PLEX_TOKEN = 'yMsAwX4HJ31TEdsfNbMy';
+        const PLEX_SERVER = '192.168.1.112:32400';
 
         //https://192.168.1.112:32400/library/sections?X-Plex-Token=xxxx to get what sections you want
         for (let i=0; i < $('a[class="browse-movie-title"]').length; i++) {
