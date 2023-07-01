@@ -2,13 +2,13 @@
 // ==UserScript==
 // @name        check if already have movie on yts
 // @namespace   yts checker
-// @version     1.0
+// @version     1.1
 // @match     http*://yts.torrentbay.net/movies/*
 // @grant       none
 // @description  check if yts movie is already downloaded into plex
 // @updateURL    https://raw.githubusercontent.com/dauheeIRL/Plex-Tampermonkey-Scripts/master/ytsALLmoviecheck.js
 // @downloadURL  https://raw.githubusercontent.com/dauheeIRL/Plex-Tampermonkey-Scripts/master/ytsALLmoviecheck.js
-// @require     https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js
+// @require     https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js
 // ==/UserScript==
 
 (function($) {
@@ -27,7 +27,6 @@
             $('h1').after('<h2 style="background-color:yellow;color:red">' + strFolder + strVideoQual + '</h2>');
         }
 
-
     }
 
     function CheckMovie(strSection, TOKEN, SERVER, strMovieName, strYear){
@@ -45,6 +44,7 @@
         var strMovieName = $('h1')[0].innerText;
         var strYear = $('h2')[0].innerText;
 
+        //https://192.168.1.112:32400/library/sections?X-Plex-Token=xxxx to get what sections you want
         CheckMovie(1, PLEX_TOKEN, PLEX_SERVER, strMovieName, strYear);
         CheckMovie(4, PLEX_TOKEN, PLEX_SERVER, strMovieName, strYear);
 
