@@ -87,7 +87,7 @@
 
     function HandleRating(){
 
-        var strRatingSection = 'div[data-testid^="metadata-ratings"]';
+        const strRatingSection = 'div[data-testid^="metadata-ratings"]';
         var strMovieName = $('a[class^="PosterCardLink-link-"]').attr('aria-label');
         var strYear;
 
