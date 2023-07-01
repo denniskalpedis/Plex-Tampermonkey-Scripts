@@ -14,47 +14,34 @@
 (function($) {
     'use strict';
 
+    function UpdateH1Tag(data){
+
+        var strPlexData = new XMLSerializer().serializeToString(data.documentElement);
+
+        if (strPlexData.length > 450){
+            var strVideoQual = ' (unknown video quality)';
+            if(strPlexData.includes('videoResolution="')){
+                strVideoQual = ' (' + strPlexData.split('videoResolution="')[1].split('"')[0] + ')';
+            }
+            var strFolder = strPlexData.split('librarySectionTitle="')[1].split('"')[0];
+            $('h1').after('<h2 style="background-color:yellow;color:red">' + strFolder + strVideoQual + '</h2>');
+        }
+
+
+    }
+
     function CheckMovie(strSection, TOKEN, SERVER, strMovieName, strYear){
 
-        $.get( 'https://' + SERVER + '/library/sections/' + strSection + '/all?X-Plex-Token=' + TOKEN + '&year=' +strYear + '&title=' + encodeURIComponent(strMovieName), function( data ) {
-
-            var strPlexData = new XMLSerializer().serializeToString(data.documentElement);
-
-            if (strPlexData.length > 450){
-                var strVideoQual = strPlexData.split('videoResolution="')[1].split('"')[0]
-                $('h1').after('<h2 style="background-color:yellow;color:red">' + ((strSection == 4) ? 'KIDS' : 'ADULT') + ' section (' + strVideoQual + ')</h2>');
-            }
-
-        });
-
-        //sometimes can be a year out in plex so go before and after
-        $.get( 'https://' + SERVER + '/library/sections/' + strSection + '/all?X-Plex-Token=' + TOKEN + '&year=' + (parseInt(strYear) + 1) + '&title=' + encodeURIComponent(strMovieName), function( data ) {
-
-            var strPlexData = new XMLSerializer().serializeToString(data.documentElement);
-
-            if (strPlexData.length > 450){
-                var strVideoQual = strPlexData.split('videoResolution="')[1].split('"')[0]
-                $('h1').after('<h2 style="background-color:yellow;color:red">' + ((strSection == 4) ? 'KIDS' : 'ADULT') + ' section (' + strVideoQual + ')</h2>');
-            }
-
-        });
-
-        $.get( 'https://' + SERVER + '/library/sections/' + strSection + '/all?X-Plex-Token=' + TOKEN + '&year=' + (parseInt(strYear) - 1) + '&title=' + encodeURIComponent(strMovieName), function( data ) {
-
-            var strPlexData = new XMLSerializer().serializeToString(data.documentElement);
-
-            if (strPlexData.length > 450){
-                var strVideoQual = strPlexData.split('videoResolution="')[1].split('"')[0]
-                $('h1').after('<h2 style="background-color:yellow;color:red">' + ((strSection == 4) ? 'KIDS' : 'ADULT') + ' section (' + strVideoQual + ')</h2>');
-            }
-
+        //get year before and after as there can be a slight mismatch sometimes
+        $.get( 'https://' + SERVER + '/library/sections/' + strSection + '/all?X-Plex-Token=' + TOKEN + '&year>=' + (parseInt(strYear) - 1) + '&year<=' + (parseInt(strYear) + 1) + '&title=' + encodeURIComponent(strMovieName), function( data ) {
+            UpdateH1Tag(data);
         });
 
     }
 
     function CheckPLEXForMovie(){
-        const PLEX_TOKEN = 'x';
-        const PLEX_SERVER = xx';
+        const PLEX_TOKEN = 'yMsAwX4HJ31TEdsfNbMy';
+        const PLEX_SERVER = '192.168.1.112:32400';
         var strMovieName = $('h1')[0].innerText;
         var strYear = $('h2')[0].innerText;
 
