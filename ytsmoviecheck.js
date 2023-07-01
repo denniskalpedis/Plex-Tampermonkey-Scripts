@@ -18,7 +18,7 @@
 
         var strPlexData = new XMLSerializer().serializeToString(data.documentElement);
 
-        if (strPlexData.length > 450){
+        if ((strPlexData.length > 450)&&(strPlexData.includes($('h1')[0].innerText))){
             var strVideoQual = ' (unknown video quality)';
             if(strPlexData.includes('videoResolution="')){
                 strVideoQual = ' (' + strPlexData.split('videoResolution="')[1].split('"')[0] + ')';
