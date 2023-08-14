@@ -6,8 +6,8 @@
 // @match     http*://yts.torrentbay.net/movies/*
 // @grant       none
 // @description  check if yts movie is already downloaded into plex
-// @updateURL    https://raw.githubusercontent.com/dauheeIRL/Plex-Tampermonkey-Scripts/master/ytsALLmoviecheck.js
-// @downloadURL  https://raw.githubusercontent.com/dauheeIRL/Plex-Tampermonkey-Scripts/master/ytsALLmoviecheck.js
+// @updateURL    https://raw.githubusercontent.com/dauheeIRL/Plex-Tampermonkey-Scripts/master/ytsmoviecheck.js
+// @downloadURL  https://raw.githubusercontent.com/dauheeIRL/Plex-Tampermonkey-Scripts/master/ytsmoviecheck.js
 // @require     https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js
 // ==/UserScript==
 
@@ -24,7 +24,8 @@
                 strVideoQual = ' (' + strPlexData.split('videoResolution="')[1].split('"')[0] + ')';
             }
             var strFolder = strPlexData.split('librarySectionTitle="')[1].split('"')[0];
-            $('h1').after('<h2 style="background-color:yellow;color:red">' + strFolder + strVideoQual + '</h2>');
+            $('em[class="pull-left"]').after('<h2 style="background-color:yellow;color:red">' + strFolder + strVideoQual + '</h2>');
+            //$('h1').after('<h2 style="background-color:yellow;color:red">' + strFolder + strVideoQual + '</h2>');
         }
 
     }
@@ -39,8 +40,8 @@
     }
 
     function CheckPLEXForMovie(){
-        const PLEX_TOKEN = 'yMsAwX4HJ31TEdsfNbMy';
-        const PLEX_SERVER = '192.168.1.112:32400';
+        const PLEX_TOKEN = 'xxxxx';
+        const PLEX_SERVER = 'xxxxx';
         var strMovieName = $('h1')[0].innerText;
         var strYear = $('h2')[0].innerText;
 
