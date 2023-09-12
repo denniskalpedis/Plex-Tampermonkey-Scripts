@@ -14,11 +14,11 @@
 (function($) {
     'use strict';
 
-    function UpdateH1Tag(data){
+    function UpdateH1Tag(data, strMovieName){
 
         var strPlexData = new XMLSerializer().serializeToString(data.documentElement);
 
-        if ((strPlexData.length > 450)&&(strPlexData.includes($('h1')[0].innerText))){
+        if ((strPlexData.length > 450)&&(strPlexData.includes($('h1')[0].innerText))&&(strPlexData.toLowerCase().includes('"' + strMovieName.toLowerCase() + '"'))){
             var strVideoQual = ' (unknown video quality)';
             if(strPlexData.includes('videoResolution="')){
                 strVideoQual = ' (' + strPlexData.split('videoResolution="')[1].split('"')[0] + ')';
@@ -34,14 +34,14 @@
 
         //get year before and after as there can be a slight mismatch sometimes
         $.get( 'https://' + SERVER + '/library/sections/' + strSection + '/all?X-Plex-Token=' + TOKEN + '&year>=' + (parseInt(strYear) - 1) + '&year<=' + (parseInt(strYear) + 1) + '&title=' + encodeURIComponent(strMovieName), function( data ) {
-            UpdateH1Tag(data);
+            UpdateH1Tag(data, strMovieName);
         });
 
     }
 
     function CheckPLEXForMovie(){
-        const PLEX_TOKEN = 'xxxxx';
-        const PLEX_SERVER = 'xxxxx';
+        const PLEX_TOKEN = 'xxx';
+        const PLEX_SERVER = '192.1xxxxx12:32400';
         var strMovieName = $('h1')[0].innerText;
         var strYear = $('h2')[0].innerText;
 
