@@ -4,7 +4,9 @@
 // @namespace   yts_checker
 // @version     1.2
 // @match     http*://yts.torrentbay.net/browse-movies*
+// @match     http*://yts.torrentbay.net/trending-movies*
 // @match     http*://yts.mx/browse-movies*
+// @match     http*://yts.mx/trending-movies*
 // @grant       none
 // @description  check if yts movie is already downloaded into plex
 // @updateURL    https://raw.githubusercontent.com/dauheeIRL/Plex-Tampermonkey-Scripts/master/ytsallmoviecheck.js
@@ -34,10 +36,10 @@
     }
 
     function CheckPLEXForMovies(){
-        const PLEX_TOKEN = 'xxxxxx';
-        const PLEX_SERVER = '192.ss.1.sssss:ss';
+        const PLEX_TOKEN = 'yMsAwX4HJ31TEdsfNbMy';
+        const PLEX_SERVER = '192.168.1.112:32400';
 
-        //https://11111111:999/library/sections?X-Plex-Token=xxxx to get what sections you want
+        //https://192.168.1.112:32400/library/sections?X-Plex-Token=xxxx to get what sections you want
         for (let i=0; i < $('a[class="browse-movie-title"]').length; i++) {
             CheckMovie(1, PLEX_TOKEN, PLEX_SERVER, i, $('a[class="browse-movie-title"]')[i].innerText, $('div[class="browse-movie-year"]')[i].innerText);
             CheckMovie(4, PLEX_TOKEN, PLEX_SERVER, i, $('a[class="browse-movie-title"]')[i].innerText, $('div[class="browse-movie-year"]')[i].innerText);
