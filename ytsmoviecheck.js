@@ -1,14 +1,15 @@
 /* globals jQuery, $ */
 // ==UserScript==
 // @name        check if already have movie on yts
-// @namespace   yts checker
-// @version     1.1
-// @match     http*://yts.torrentbay.net/movies/*
+// @namespace   yts_checker
+// @version     1.2
+// @match     http*://yts.torrentbay.net/movies*
+// @match     http*://yts.mx/movies*
 // @grant       none
 // @description  check if yts movie is already downloaded into plex
 // @updateURL    https://raw.githubusercontent.com/dauheeIRL/Plex-Tampermonkey-Scripts/master/ytsmoviecheck.js
 // @downloadURL  https://raw.githubusercontent.com/dauheeIRL/Plex-Tampermonkey-Scripts/master/ytsmoviecheck.js
-// @require     https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js
+// @require     https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js
 // ==/UserScript==
 
 (function($) {
@@ -40,12 +41,12 @@
     }
 
     function CheckPLEXForMovie(){
-        const PLEX_TOKEN = 'xxx';
-        const PLEX_SERVER = '192.1xxxxx12:32400';
+        const PLEX_TOKEN = 'dfsdfdsfsdfs';
+        const PLEX_SERVER = '177.77.7.7.7.:55';
         var strMovieName = $('h1')[0].innerText;
         var strYear = $('h2')[0].innerText;
 
-        //https://192.168.1.112:32400/library/sections?X-Plex-Token=xxxx to get what sections you want
+        //https://198.88.8.5.4:5555/library/sections?X-Plex-Token=xxxx to get what sections you want
         CheckMovie(1, PLEX_TOKEN, PLEX_SERVER, strMovieName, strYear);
         CheckMovie(4, PLEX_TOKEN, PLEX_SERVER, strMovieName, strYear);
 
