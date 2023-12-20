@@ -41,8 +41,8 @@
     }
 
     function CheckPLEXForMovies(){
-        const PLEX_TOKEN = 'xxxx';
-        const PLEX_SERVER = '192.16xxxxx:32400';
+        const PLEX_TOKEN = 'xx';
+        const PLEX_SERVER = '192.1:32400';
 
         //https://192.168.1.112:32400/library/sections?X-Plex-Token=xxxx to get what sections you want
         for (let i=0; i < $('a[class="browse-movie-title"]').length; i++) {
