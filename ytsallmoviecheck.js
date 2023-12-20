@@ -17,13 +17,18 @@
 (function($) {
     'use strict';
 
+    function htmlEncode(value) {
+        var encodedValue = $('<div />').text(value).html();
+        return encodedValue;
+    }
+
     function CheckMovie(strSection, TOKEN, SERVER, intIndex, strMovieName, strYear){
 
         $.get( 'https://' + SERVER + '/library/sections/' + strSection + '/all?X-Plex-Token=' + TOKEN + '&year>=' + (parseInt(strYear) - 1) + '&year<=' + (parseInt(strYear) + 1) + '&title=' + encodeURIComponent(strMovieName), function( data ) {
 
             var strPlexData = new XMLSerializer().serializeToString(data.documentElement);
 
-            if ((strPlexData.length > 450)&&(strPlexData.toLowerCase().includes('"' + strMovieName.toLowerCase() + '"'))){//&&(strPlexData.includes($('h1')[0].innerText))){
+            if ((strPlexData.length > 450)&&(strPlexData.toLowerCase().includes('"' + htmlEncode(strMovieName.toLowerCase()) + '"'))){//&&(strPlexData.includes($('h1')[0].innerText))){
                 var strVideoQual = ' (unknown video quality)';
                 if(strPlexData.includes('videoResolution="')){
                     strVideoQual = ' (' + strPlexData.split('videoResolution="')[1].split('"')[0] + ')';
@@ -36,8 +41,8 @@
     }
 
     function CheckPLEXForMovies(){
-        const PLEX_TOKEN = 'yMsAwX4HJ31TEdsfNbMy';
-        const PLEX_SERVER = '192.168.1.112:32400';
+        const PLEX_TOKEN = 'xxxx';
+        const PLEX_SERVER = '192.16xxxxx:32400';
 
         //https://192.168.1.112:32400/library/sections?X-Plex-Token=xxxx to get what sections you want
         for (let i=0; i < $('a[class="browse-movie-title"]').length; i++) {
