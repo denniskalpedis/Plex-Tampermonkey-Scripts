@@ -3,7 +3,7 @@
 // @name        plex IMDb Link and SMB Share
 // @namespace   Plex.tv
 // @version     1.1
-// @match     http*://192.168.1.112:32400/web/index.html*
+// @match     http*://192.168.1.xx:32400/web/index.html*
 // @grant       none
 // @description  add click for IMDB details, also click title to copy file location
 // @updateURL    https://raw.githubusercontent.com/dauheeIRL/Plex-Tampermonkey-Scripts/master/IMDbLinks.js
@@ -89,12 +89,14 @@
 
         const strRatingSection = 'div[data-testid^="metadata-ratings"]';
         var strMovieName = $('a[class^="PosterCardLink-link-"]').attr('aria-label');
-        var strYear;
+        var strYear = '';
 
         if(($('[title^="IMDb Rating"]').length > 0)|($('[title^="Rotten Tomatoes"]').length > 0)){
             var lastpos = strMovieName.lastIndexOf(', ') + 2;
-            strYear = strMovieName.slice(lastpos);
-            strMovieName = strMovieName.substr(0, lastpos - 2);
+            if (lastpos > 1){
+                strYear = strMovieName.slice(lastpos);
+                strMovieName = strMovieName.substr(0, lastpos - 2);
+            }
 
         } else {
             //tv series
