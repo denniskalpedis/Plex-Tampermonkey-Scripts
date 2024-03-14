@@ -3,7 +3,7 @@
 // @name        plex IMDb Link and SMB Share
 // @namespace   Plex.tv
 // @version     1.1
-// @match     http*://192.168.1.xx:32400/web/index.html*
+// @match     http*://192.168.1.112:32400/web/index.html*
 // @grant       none
 // @description  add click for IMDB details, also click title to copy file location
 // @updateURL    https://raw.githubusercontent.com/dauheeIRL/Plex-Tampermonkey-Scripts/master/IMDbLinks.js
@@ -105,7 +105,7 @@
 
         strMovieName = strMovieName.replace(' (' + strYear + ')', ''); //don't want year at end
 
-        $(strRatingSection).attr('onClick', 'window.open("https://www.imdb.com/search/title/?title=' + strMovieName.replaceAll(' ', '+') + '&release_date=' + (parseInt(strYear) - 1) + '-01-01,' + (parseInt(strYear) + 1) + '-01-01&adult=include&sort=year,desc", \'_blank\')');
+        $(strRatingSection).attr('onClick', 'window.open("https://www.imdb.com/search/title/?title=' + strMovieName.replaceAll(' ', '+') + '&release_date=' + (parseInt(strYear) - 1) + '-01-01,' + (parseInt(strYear) + 1) + '-12-31&adult=include&sort=year,desc", \'_blank\')');
 
         $(strRatingSection).hover(
             function () {
